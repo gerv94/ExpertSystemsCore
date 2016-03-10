@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="main.model.entities.RulesItemEntity" table="rulesitem">
+		<meta attribute="class-description">
+			test
+		</meta>
+		<id name="id" type="int" column="id">
+			<generator class="native" />
+		</id>
+		<property name="antecedent" type="int" column="antecedent_id" />
+		<property name="negated" type="true_false" column="negated" />
+	</class>
+</hibernate-mapping>
