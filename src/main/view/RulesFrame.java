@@ -218,4 +218,8 @@ public class RulesFrame extends JFrame implements Runnable, ActionListener {
 		textField.setText(textField.getText() + e.getActionCommand());
 		textField.requestFocus();
 	}
+
+	public void clearText() {
+		textField.setText("");
+	}
 }

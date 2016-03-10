@@ -55,7 +55,7 @@ public class RulesHeaderEntity {
 	}
 
 	public String getText() {
-		String string = " ";
+		String string = "";
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 			string += (ruleItem.isNegated() ? StaticController.NEGATION : "")
@@ -70,7 +70,7 @@ public class RulesHeaderEntity {
 
 	@Override
 	public String toString() {
-		String string = id + " | ";
+		String string = "";
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 			string += (ruleItem.isNegated() ? StaticController.uNEGATION : "")

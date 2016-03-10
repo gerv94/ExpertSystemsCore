@@ -149,7 +149,7 @@ public class DictionaryFrame extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-		int caretPosition;
+		int selectionEnd, selectionStart;
 		while (true) {
 			try {
 				Thread.sleep(50);
@@ -157,15 +157,22 @@ public class DictionaryFrame extends JFrame implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			caretPosition = textField.getCaretPosition();
+			selectionEnd = textField.getCaretPosition();
+			selectionStart = textField.getSelectionStart() < selectionEnd ? textField.getSelectionStart() : textField.getSelectionEnd();
 			textField.setText(textField.getText());
 			textField.setCaretPosition(
-					caretPosition > textField.getText().length() ? textField.getText().length() : caretPosition);
+					selectionStart < textField.getText().length() ? selectionStart : textField.getText().length());
+			textField.moveCaretPosition(
+					selectionEnd < textField.getText().length() ? selectionEnd : textField.getText().length());
 			if (getText().matches(StaticController.dictionaryValidator)) {
 				lblO.setForeground(Color.GREEN);
 			} else {
 				lblO.setForeground(Color.RED);
 			}
 		}
+	}
+
+	public void clearText() {
+		textField.setText("");
 	}
 }

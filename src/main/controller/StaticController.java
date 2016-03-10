@@ -23,5 +23,6 @@ public class StaticController {
 	public static final String NEGATION = "!";
 	public static final String CONDITIONAL = ">";
 	public static final String BICONDITIONAL = "<>";
-
+	
+	//jflex - kup
 }

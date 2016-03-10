@@ -2,6 +2,8 @@ package main.controller;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -72,9 +74,13 @@ public final class DictionaryController {
 		if(!text.matches(StaticController.dictionaryValidator)){
 			throw new Exception("Bad input: dictionaryEntry has not matched");
 		}
+		
 		try {
 			tx = session.beginTransaction();
 			entity = new DictionaryEntity(text);
+			if (propositions.contains(entity)) {
+				throw new EntityExistsException("The proposition: " + entity + " already exists");
+			}
 			session.save(entity);
 			tx.commit();
 		} catch (HibernateException e) {

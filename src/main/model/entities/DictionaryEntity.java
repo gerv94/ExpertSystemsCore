@@ -32,7 +32,18 @@ public class DictionaryEntity {
 	
 	@Override
 	public String toString() {
-		return id + " | " + MainClass.dictionaryController.getCodeOf(id) + " : " + text;
+		return MainClass.dictionaryController.getCodeOf(id) + " : " + text;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean res = false;
+		DictionaryEntity dictionaryEntity;
+		if(obj instanceof DictionaryEntity){
+			dictionaryEntity = (DictionaryEntity) obj;
+			res = text.equals(dictionaryEntity.getText());
+		}
+		return res;
 	}
 
 }

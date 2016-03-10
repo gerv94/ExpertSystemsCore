@@ -73,6 +73,7 @@ public class MainClass implements ActionListener {
 		case "addProposition":
 			try {
 				dictionaryModel.addElement(dictionaryController.addPropostion(dicionaryFrame.getText()));
+				dicionaryFrame.clearText();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -93,9 +94,10 @@ public class MainClass implements ActionListener {
 				try {
 					dictionaryEntity = dictionaryController.updatePropostion(((DictionaryEntity) selected).getId(),
 							dicionaryFrame.getText());
-					if (dictionaryEntity != null)
+					if (dictionaryEntity != null){
 						dictionaryModel.set(dicionaryFrame.getSelectedIndex(), dictionaryEntity);
-					else
+						dicionaryFrame.clearText();
+					}else
 						System.out.println("Error trying to update: " + selected);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -105,6 +107,7 @@ public class MainClass implements ActionListener {
 		case "addRule":
 			try {
 				rulesModel.addElement(rulesController.addRule(rulesFrame.getText()));
+				rulesFrame.clearText();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
