@@ -12,13 +12,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import main.MainClassFromGUI;
+import main.ConsoleController;
+import main.HexBiController;
 import main.model.entities.RulesHeaderEntity;
 import main.model.entities.RulesItemEntity;
+import regex.parser.RegExController;
 
 public class RulesController {
 
-	
 	private static List<RulesHeaderEntity> rules;
 	Transaction tx = null;
 	Session session = null;
@@ -33,7 +34,7 @@ public class RulesController {
 
 	@SuppressWarnings("unchecked")
 	public int retrieve() {
-		session = MainClassFromGUI.sessionFactory.openSession();
+		session = ConsoleController.sessionFactory.openSession();
 		tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -63,12 +64,12 @@ public class RulesController {
 			for (Iterator<RulesItemEntity> iterator = rules.get(i).getAntecedents().iterator(); iterator.hasNext();) {
 				RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 				strArray[i] += (ruleItem.isNegated() ? "NO " : "SI ")
-						+ MainClassFromGUI.dictionaryController.getTextOf(ruleItem.getAntecedent());
+						+ ConsoleController.dictionaryController.getTextOf(ruleItem.getAntecedent());
 				if (iterator.hasNext())
 					strArray[i] += " Y ";
 			}
 			strArray[i] += " IMPLICA QUE " + (rules.get(i).isNegated() ? "NO " : "SI ")
-					+ MainClassFromGUI.dictionaryController.getTextOf(rules.get(i).getConsecuent());
+					+ ConsoleController.dictionaryController.getTextOf(rules.get(i).getConsecuent());
 		}
 		return strArray;
 	}
@@ -79,44 +80,36 @@ public class RulesController {
 			strArray[i] = rules.get(i).getId() + " | ";
 			for (Iterator<RulesItemEntity> iterator = rules.get(i).getAntecedents().iterator(); iterator.hasNext();) {
 				RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
-				strArray[i] += (ruleItem.isNegated() ? StaticController.uNEGATION : "")
-						+ MainClassFromGUI.dictionaryController.getCodeOf(ruleItem.getAntecedent());
+				strArray[i] += (ruleItem.isNegated() ? "!" : "") + HexBiController.intToHexBi(ruleItem.getAntecedent());
 				if (iterator.hasNext())
-					strArray[i] += StaticController.uAND;
+					strArray[i] += "&";
 			}
-			strArray[i] += " " + StaticController.uCONDITIONAL + " " + (rules.get(i).isNegated() ? StaticController.uNEGATION : "")
-					+ MainClassFromGUI.dictionaryController.getCodeOf(rules.get(i).getConsecuent());
+			strArray[i] += " > " + (rules.get(i).isNegated() ? "!" : "")
+					+ HexBiController.intToHexBi(rules.get(i).getConsecuent());
 		}
 		return strArray;
 	}
 
 	public RulesHeaderEntity addRule(String rule) throws Exception {
 		RulesHeaderEntity rulesHeaderEntity = null;
-//		rule = "!a&b>!c";
+		// rule = "!a&b>!c";
 		rule = rule.replace(" ", "");
-		Matcher matcher = StaticController.ruleValidatorPattern.matcher(rule);
+		Matcher matcher;
 		/*
 		 * a | b -> c good a | b -> c bad, convert to two rules: a -> c, b -> c
 		 * a -> b & c bad, convert to two rules: a -> b, a -> c a <-> b bad,
 		 * convert to two rules: a -> b, b -> a
 		 */
-		if (!rule.matches(StaticController.ruleValidator)) {
-			throw new Exception("Bad input: validatorPattern has not matched");
-		}
 
-		for (int i = 0; i <= matcher.groupCount(); i++) {
-//			System.out.println(matcher.group(i) + " - " + matcher.start(i) + ":" + matcher.end(i));
-		}
-
-		matcher = StaticController.ruleBestPattern.matcher(rule);
+		matcher = RegExController.ruleBestPattern.matcher(rule);
 		if (matcher.find()) {
 			System.out.println("Is a good case");
 			RulesItemEntity lastElement = null;
 			Set<RulesItemEntity> antecedents = new HashSet<RulesItemEntity>();
-			matcher = StaticController.rulePropPattern.matcher(rule);
+			matcher = RegExController.rulePropPattern.matcher(rule);
 			while (matcher.find()) {
 				System.out.println((matcher.group(1).equals("!") ? "not " : "") + matcher.group(2));
-				lastElement = new RulesItemEntity(MainClassFromGUI.dictionaryController.getIndexOf(matcher.group(2)),
+				lastElement = new RulesItemEntity(HexBiController.hexBiToInteger(matcher.group(2)),
 						matcher.group(1).equals("!"));
 				antecedents.add(lastElement);
 			}
@@ -125,13 +118,13 @@ public class RulesController {
 			rulesHeaderEntity.setAntecedents(antecedents);
 			System.out.println(rulesHeaderEntity);
 			return addRule(rulesHeaderEntity);
+		} else {
+			throw new Exception("Bad rule: error matching the rule");
 		}
-
-		return rulesHeaderEntity;
 	}
-	
+
 	public boolean deleteRule(int id) {
-		Session session = MainClassFromGUI.sessionFactory.openSession();
+		Session session = ConsoleController.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -151,7 +144,7 @@ public class RulesController {
 	}
 
 	private RulesHeaderEntity addRule(RulesHeaderEntity rulesHeaderEntity) {
-		session = MainClassFromGUI.sessionFactory.openSession();
+		session = ConsoleController.sessionFactory.openSession();
 		tx = null;
 		if (rules.contains(rulesHeaderEntity)) {
 			throw new EntityExistsException("The rule: " + rulesHeaderEntity + " already exists");
@@ -173,9 +166,9 @@ public class RulesController {
 		rules.add(rulesHeaderEntity);
 		return rulesHeaderEntity;
 	}
-	
+
 	private RulesHeaderEntity updateRule(RulesHeaderEntity rulesHeaderEntity) {
-		Session session = MainClassFromGUI.sessionFactory.openSession();
+		Session session = ConsoleController.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -194,24 +187,28 @@ public class RulesController {
 	}
 
 	public RulesHeaderEntity updateRule(int id, String text) {
-		RulesHeaderEntity rulesHeaderEntity = null;
-		Matcher matcher;
-		if(StaticController.ruleBestPattern.matcher(text).find()){
-			RulesItemEntity lastElement = null;
-			Set<RulesItemEntity> antecedents = new HashSet<RulesItemEntity>();
-			matcher = StaticController.rulePropPattern.matcher(text);
-			while (matcher.find()) {
-				System.out.println((matcher.group(1).equals("!") ? "not " : "") + matcher.group(2));
-				lastElement = new RulesItemEntity(MainClassFromGUI.dictionaryController.getIndexOf(matcher.group(2)),
-						matcher.group(1).equals("!"));
-				antecedents.add(lastElement);
-			}
-			antecedents.remove(lastElement);
-			rulesHeaderEntity = new RulesHeaderEntity(lastElement.getAntecedent(), lastElement.isNegated());
-			rulesHeaderEntity.setAntecedents(antecedents);
-			System.out.println(rulesHeaderEntity);
-			return updateRule(rulesHeaderEntity);
-		}
+		// RulesHeaderEntity rulesHeaderEntity = null;
+		// Matcher matcher;
+		// if (StaticController.ruleBestPattern.matcher(text).find()) {
+		// RulesItemEntity lastElement = null;
+		// Set<RulesItemEntity> antecedents = new HashSet<RulesItemEntity>();
+		// matcher = StaticController.rulePropPattern.matcher(text);
+		// while (matcher.find()) {
+		// System.out.println((matcher.group(1).equals("!") ? "not " : "") +
+		// matcher.group(2));
+		// lastElement = new
+		// RulesItemEntity(HexBiController.hexBiToInteger(matcher.group(2)),
+		// matcher.group(1).equals("!"));
+		// antecedents.add(lastElement);
+		// }
+		// antecedents.remove(lastElement);
+		// rulesHeaderEntity = new
+		// RulesHeaderEntity(lastElement.getAntecedent(),
+		// lastElement.isNegated());
+		// rulesHeaderEntity.setAntecedents(antecedents);
+		// System.out.println(rulesHeaderEntity);
+		// return updateRule(rulesHeaderEntity);
+		// }
 		return null;
 	}
 }

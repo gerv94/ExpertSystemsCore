@@ -3,8 +3,6 @@ package lexParser.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.org.apache.xml.internal.security.Init;
-
 /**
  * 
  * @author GermánEduardo
@@ -177,10 +175,10 @@ public class GroupModel implements DiscretElement {
 					i = end = count;
 					end += temp.size();
 					do {
-						if (count < elements.size())
+						if (count == i)
 							elements.set(count, temp.getElement(count - i));
 						else
-							elements.add(temp.getElement(count - i));
+							elements.add(count, temp.getElement(count - i));
 						count++;
 					} while (count < end);
 				}
@@ -193,10 +191,10 @@ public class GroupModel implements DiscretElement {
 						i = end = count;
 						end += temp.size();
 						do {
-							if (count < elements.size())
+							if (count == i)
 								elements.set(count, temp.getElement(count - i));
 							else
-								elements.add(temp.getElement(count - i));
+								elements.add(count, temp.getElement(count - i));
 							count++;
 						} while (count < end);
 					}
@@ -210,7 +208,7 @@ public class GroupModel implements DiscretElement {
 						i = end = count;
 						end += temp.size();
 						do {
-							if (count < elements.size())
+							if (count == i)
 								elements.set(count, temp.getElement(count - i));
 							else
 								elements.add(temp.getElement(count - i));
@@ -223,6 +221,8 @@ public class GroupModel implements DiscretElement {
 	}
 
 	public void makeDNF() {
+		if (isAnd() || isOr())
+			return;
 		while (!isDNF()) {
 			for (DiscretElement discretElement : elements) {
 				if (discretElement instanceof GroupModel)
@@ -235,11 +235,27 @@ public class GroupModel implements DiscretElement {
 					}
 				}
 			}
-//			System.out.println("     " + toString());
-//			order();
-//			System.out.println("     " + toString());
-//			System.out.println();
 		}
+		order();
+	}
+	
+	public void makeCNF() {
+		if (isAnd() || isOr())
+			return;
+		while (!isCNF()) {
+			for (DiscretElement discretElement : elements) {
+				if (discretElement instanceof GroupModel)
+					((GroupModel) discretElement).makeCNF();
+			}
+			for (int count = 0; count < elements.size(); count++) {
+				if (elements.get(count) instanceof OperatorModel) {
+					if (((OperatorModel) elements.get(count)).getOperator().equals("|")) {
+						distribute(count);
+					}
+				}
+			}
+		}
+		order();
 	}
 
 	private void distribute(int index) {
@@ -250,10 +266,6 @@ public class GroupModel implements DiscretElement {
 		if (elem2 instanceof GroupModel || elem1 instanceof GroupModel) {
 			GroupModel groupModel = (GroupModel) (elem2 instanceof GroupModel ? elem2 : elem1);
 			DiscretElement stone = groupModel.equals(elem2) ? elem1 : elem2;
-			if (((OperatorModel) elements.get(index)).getOperator().equals("|") && !groupModel.isAnd())
-				return;
-			if (((OperatorModel) elements.get(index)).getOperator().equals("&") && !groupModel.isOr())
-				return;
 			res = new GroupModel();
 			for (DiscretElement discretElement : groupModel.elements) {
 				if (!(discretElement instanceof OperatorModel)) {
@@ -261,9 +273,9 @@ public class GroupModel implements DiscretElement {
 					temp.addElement(discretElement);
 					temp.addElement(elements.get(index));
 					temp.addElement(stone);
-					if (res.elements.size() != 0)
-						res.addElement(new OperatorModel(elements.get(index).equals("|") ? "&" : "|"));
 					res.addElement(temp);
+				} else {
+					res.addElement(new OperatorModel(elements.get(index).equals("|") ? "&" : "|"));
 				}
 			}
 			elements.set(index - 1, res);
@@ -274,5 +286,9 @@ public class GroupModel implements DiscretElement {
 
 	public int size() {
 		return elements.size();
+	}
+
+	public List<DiscretElement> getElements() {
+		return elements;
 	}
 }

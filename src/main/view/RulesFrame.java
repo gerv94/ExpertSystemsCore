@@ -77,30 +77,30 @@ public class RulesFrame extends JFrame implements Runnable, ActionListener {
 		panel.add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new GridLayout(0, 5, 0, 0));
 
-		JButton btnAnd = new JButton(StaticController.uAND);
-		btnAnd.addActionListener(this);
-		btnAnd.setBackground(Color.WHITE);
-		panel_2.add(btnAnd);
-
-		JButton btnOr = new JButton(StaticController.uOR);
-		btnOr.addActionListener(this);
-		btnOr.setBackground(Color.WHITE);
-		panel_2.add(btnOr);
-
-		JButton btnNot = new JButton(StaticController.uNEGATION);
-		btnNot.addActionListener(this);
-		btnNot.setBackground(Color.WHITE);
-		panel_2.add(btnNot);
-
-		JButton btnConditional = new JButton(StaticController.uCONDITIONAL);
-		btnConditional.addActionListener(this);
-		btnConditional.setBackground(Color.WHITE);
-		panel_2.add(btnConditional);
-
-		JButton btnBiconditional = new JButton(StaticController.uBICONDITIONAL);
-		btnBiconditional.addActionListener(this);
-		btnBiconditional.setBackground(Color.WHITE);
-		panel_2.add(btnBiconditional);
+//		JButton btnAnd = new JButton(StaticController.uAND);
+//		btnAnd.addActionListener(this);
+//		btnAnd.setBackground(Color.WHITE);
+//		panel_2.add(btnAnd);
+//
+//		JButton btnOr = new JButton(StaticController.uOR);
+//		btnOr.addActionListener(this);
+//		btnOr.setBackground(Color.WHITE);
+//		panel_2.add(btnOr);
+//
+//		JButton btnNot = new JButton(StaticController.uNEGATION);
+//		btnNot.addActionListener(this);
+//		btnNot.setBackground(Color.WHITE);
+//		panel_2.add(btnNot);
+//
+//		JButton btnConditional = new JButton(StaticController.uCONDITIONAL);
+//		btnConditional.addActionListener(this);
+//		btnConditional.setBackground(Color.WHITE);
+//		panel_2.add(btnConditional);
+//
+//		JButton btnBiconditional = new JButton(StaticController.uBICONDITIONAL);
+//		btnBiconditional.addActionListener(this);
+//		btnBiconditional.setBackground(Color.WHITE);
+//		panel_2.add(btnBiconditional);
 
 		JPanel panel_3 = new JPanel();
 		panel.add(panel_3, BorderLayout.SOUTH);
@@ -170,21 +170,21 @@ public class RulesFrame extends JFrame implements Runnable, ActionListener {
 
 	public String convertConsoleToUnicode(String string) {
 		string = string.toUpperCase();
-		string = string.replace(StaticController.AND, StaticController.uAND);
-		string = string.replace(StaticController.OR, StaticController.uOR);
-		string = string.replace(StaticController.NEGATION, StaticController.uNEGATION);
-		string = string.replace(StaticController.BICONDITIONAL, StaticController.uBICONDITIONAL);
-		string = string.replace(StaticController.CONDITIONAL, StaticController.uCONDITIONAL);
+//		string = string.replace(StaticController.AND, StaticController.uAND);
+//		string = string.replace(StaticController.OR, StaticController.uOR);
+//		string = string.replace(StaticController.NEGATION, StaticController.uNEGATION);
+//		string = string.replace(StaticController.BICONDITIONAL, StaticController.uBICONDITIONAL);
+//		string = string.replace(StaticController.CONDITIONAL, StaticController.uCONDITIONAL);
 		return string;
 	}
 
 	public String convertUnicodeToConsole(String string) {
 		string = string.toUpperCase();
-		string = string.replace(StaticController.uAND, StaticController.AND);
-		string = string.replace(StaticController.uOR, StaticController.OR);
-		string = string.replace(StaticController.uNEGATION, StaticController.NEGATION);
-		string = string.replace(StaticController.uBICONDITIONAL, StaticController.BICONDITIONAL);
-		string = string.replace(StaticController.uCONDITIONAL, StaticController.CONDITIONAL);
+//		string = string.replace(StaticController.uAND, StaticController.AND);
+//		string = string.replace(StaticController.uOR, StaticController.OR);
+//		string = string.replace(StaticController.uNEGATION, StaticController.NEGATION);
+//		string = string.replace(StaticController.uBICONDITIONAL, StaticController.BICONDITIONAL);
+//		string = string.replace(StaticController.uCONDITIONAL, StaticController.CONDITIONAL);
 		return string;
 	}
 
@@ -205,11 +205,11 @@ public class RulesFrame extends JFrame implements Runnable, ActionListener {
 					selectionStart < textField.getText().length() ? selectionStart : textField.getText().length());
 			textField.moveCaretPosition(
 					selectionEnd < textField.getText().length() ? selectionEnd : textField.getText().length());
-			if (getText().matches(StaticController.ruleValidator)) {
-				lblO.setForeground(Color.GREEN);
-			} else {
-				lblO.setForeground(Color.RED);
-			}
+//			if (getText().matches(StaticController.ruleValidator)) {
+//				lblO.setForeground(Color.GREEN);
+//			} else {
+//				lblO.setForeground(Color.RED);
+//			}
 		}
 	}
 

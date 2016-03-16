@@ -164,11 +164,11 @@ public class DictionaryFrame extends JFrame implements Runnable {
 					selectionStart < textField.getText().length() ? selectionStart : textField.getText().length());
 			textField.moveCaretPosition(
 					selectionEnd < textField.getText().length() ? selectionEnd : textField.getText().length());
-			if (getText().matches(StaticController.dictionaryValidator)) {
-				lblO.setForeground(Color.GREEN);
-			} else {
-				lblO.setForeground(Color.RED);
-			}
+//			if (getText().matches(StaticController.dictionaryValidator)) {
+//				lblO.setForeground(Color.GREEN);
+//			} else {
+//				lblO.setForeground(Color.RED);
+//			}
 		}
 	}
 

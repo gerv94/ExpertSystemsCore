@@ -16,9 +16,9 @@ import main.view.DictionaryFrame;
 import main.view.RulesFrame;
 
 public class MainClassFromGUI implements ActionListener {
-	public static SessionFactory sessionFactory = null;
-	public static DictionaryController dictionaryController = new DictionaryController();
-	public static RulesController rulesController = new RulesController();
+	private static SessionFactory sessionFactory = null;
+	private static DictionaryController dictionaryController = new DictionaryController();
+	private static RulesController rulesController = new RulesController();
 	private DictionaryFrame dicionaryFrame;
 	private RulesFrame rulesFrame;
 	private DefaultListModel<DictionaryEntity> dictionaryModel;
@@ -81,10 +81,10 @@ public class MainClassFromGUI implements ActionListener {
 		case "deleteProposition":
 			selected = dicionaryFrame.getSelected();
 			if (selected != null) {
-				if (dictionaryController.deletePropostion(((DictionaryEntity) selected).getId()))
-					dictionaryModel.remove(dicionaryFrame.getSelectedIndex());
-				else
-					System.out.println("Error trying to delete: " + selected);
+////				if (dictionaryController.deletePropostion(((DictionaryEntity) selected).getId()))
+//					dictionaryModel.remove(dicionaryFrame.getSelectedIndex());
+//				else
+//					System.out.println("Error trying to delete: " + selected);
 			}
 			break;
 		case "updateProposition":
@@ -92,13 +92,13 @@ public class MainClassFromGUI implements ActionListener {
 			DictionaryEntity dictionaryEntity;
 			if (selected != null) {
 				try {
-					dictionaryEntity = dictionaryController.updatePropostion(((DictionaryEntity) selected).getId(),
-							dicionaryFrame.getText());
-					if (dictionaryEntity != null){
-						dictionaryModel.set(dicionaryFrame.getSelectedIndex(), dictionaryEntity);
-						dicionaryFrame.clearText();
-					}else
-						System.out.println("Error trying to update: " + selected);
+//					dictionaryEntity = dictionaryController.updatePropostion(((DictionaryEntity) selected).getId(),
+//							dicionaryFrame.getText());
+////					if (dictionaryEntity != null){
+////						dictionaryModel.set(dicionaryFrame.getSelectedIndex(), dictionaryEntity);
+////						dicionaryFrame.clearText();
+//					}else
+//						System.out.println("Error trying to update: " + selected);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -126,7 +126,7 @@ public class MainClassFromGUI implements ActionListener {
 			RulesHeaderEntity rulesHeaderEntity;
 			if (selected != null) {
 				try {
-					rulesHeaderEntity = rulesController.updateRule(((DictionaryEntity) selected).getId(),
+					rulesHeaderEntity = rulesController.updateRule(((DictionaryEntity) selected).getCodeId(),
 							rulesFrame.getText());
 					if (rulesHeaderEntity != null)
 						rulesModel.set(rulesFrame.getSelectedIndex(), rulesHeaderEntity);

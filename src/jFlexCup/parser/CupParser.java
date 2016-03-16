@@ -146,7 +146,8 @@ public class CupParser extends java_cup.runtime.lr_parser {
 
 	/** User initialization code. */
 	public void user_init() throws java.lang.Exception {
-
+		System.out.println("   .........................   ");
+		System.out.println(".:::::::::::::::::::::::::::::.");
 		System.out.println("Cup parser has been initialized");
 
 	}

@@ -3,7 +3,7 @@ package main.model.entities;
 import java.util.Iterator;
 import java.util.Set;
 
-import main.MainClassFromGUI;
+import main.HexBiController;
 import main.controller.StaticController;
 
 public class RulesHeaderEntity {
@@ -58,13 +58,11 @@ public class RulesHeaderEntity {
 		String string = "";
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
-			string += (ruleItem.isNegated() ? StaticController.NEGATION : "")
-					+ MainClassFromGUI.dictionaryController.getCodeOf(ruleItem.getAntecedent());
+			string += (ruleItem.isNegated() ? "!" : "") + ruleItem.getAntecedent();
 			if (iterator.hasNext())
-				string += " " + StaticController.AND + " ";
+				string += " & ";
 		}
-		string += " " + StaticController.CONDITIONAL + " " + (negated ? StaticController.NEGATION : "")
-				+ MainClassFromGUI.dictionaryController.getCodeOf(consecuent);
+		string += " > " + (negated ? "!" : "") + HexBiController.intToHexBi(consecuent);
 		return string;
 	}
 
@@ -73,13 +71,11 @@ public class RulesHeaderEntity {
 		String string = "";
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
-			string += (ruleItem.isNegated() ? StaticController.uNEGATION : "")
-					+ MainClassFromGUI.dictionaryController.getCodeOf(ruleItem.getAntecedent());
+			string += (ruleItem.isNegated() ? "!" : "") + HexBiController.intToHexBi(ruleItem.getAntecedent());
 			if (iterator.hasNext())
-				string += " " + StaticController.uAND + " ";
+				string += " & ";
 		}
-		string += " " + StaticController.uCONDITIONAL + " " + (negated ? StaticController.uNEGATION : "")
-				+ MainClassFromGUI.dictionaryController.getCodeOf(consecuent);
+		string += " > " + (negated ? "!" : "") + HexBiController.intToHexBi(consecuent);
 		return string;
 	}
 
@@ -88,11 +84,12 @@ public class RulesHeaderEntity {
 		boolean res = false;
 		RulesHeaderEntity rulesHeaderEntity;
 		if (obj instanceof RulesHeaderEntity) {
-			rulesHeaderEntity = (RulesHeaderEntity)obj;
-			if(consecuent == rulesHeaderEntity.getConsecuent()){
+			rulesHeaderEntity = (RulesHeaderEntity) obj;
+			if (consecuent == rulesHeaderEntity.getConsecuent()) {
 				System.out.println("same consecuent");
 			}
-			res = antecedents.equals(rulesHeaderEntity.getAntecedents()) && consecuent == rulesHeaderEntity.getConsecuent() && negated == rulesHeaderEntity.isNegated();
+			res = antecedents.equals(rulesHeaderEntity.getAntecedents())
+					&& consecuent == rulesHeaderEntity.getConsecuent() && negated == rulesHeaderEntity.isNegated();
 		}
 		return res;
 	}

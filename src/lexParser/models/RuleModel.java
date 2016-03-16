@@ -10,6 +10,30 @@ public class RuleModel {
 	private GroupModel right = new GroupModel();
 	private int direction;
 
+	public RuleModel() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public RuleModel(GroupModel left, int direction, GroupModel right) {
+		this.left = left;
+		this.direction = direction;
+		this.right = right;
+	}
+
+	public RuleModel(GroupModel left, int direction, DiscretElement discretElement) {
+		this.left = left;
+		this.direction = direction;
+		this.right = new GroupModel();
+		this.right.addElement(discretElement);
+	}
+
+	public RuleModel(LiteralModel discretElement, int direction, GroupModel right) {
+		this.left = new GroupModel();
+		this.direction = direction;
+		this.right = right;
+		this.left.addElement(discretElement);
+	}
+
 	public GroupModel getLeft() {
 		return left;
 	}
@@ -89,9 +113,33 @@ public class RuleModel {
 		right.makeDNF();
 		System.out.println("After make DNF");
 		System.out.println(toString());
-		System.out.println("left DNF " + left.isDNF());
-		System.out.println("left CNF " + left.isCNF());
-		System.out.println("left And " + left.isAnd());
-		System.out.println("left Or " + left.isOr());
+		System.out.println("::LEFT  |" + (left.isDNF() ? " DNF " : "") + (left.isCNF() ? " CNF " : "")
+				+ (left.isAnd() ? " AND " : "") + (left.isOr() ? " OR " : ""));
+		System.out.println("::RIGHT |" + (right.isDNF() ? " DNF " : "") + (right.isCNF() ? " CNF " : "")
+				+ (right.isAnd() ? " AND " : "") + (right.isOr() ? " OR " : ""));
+		System.out.println();
+	}
+
+	public String stringWithOutGroups() {
+		String res = "";
+		for (DiscretElement discretElement : left.getElements()) {
+			res += discretElement.toString();
+		}
+		switch (direction) {
+		case 1:
+			res += ">";
+			break;
+		case 0:
+			res += "<>";
+			break;
+		case -1:
+			res += "<";
+			break;
+		}
+		for (DiscretElement discretElement : right.getElements()) {
+			res += discretElement.toString();
+		}
+		// TODO Auto-generated method stub
+		return res;
 	}
 }

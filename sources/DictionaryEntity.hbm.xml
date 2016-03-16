@@ -9,6 +9,7 @@
 		<id name="id" type="int" column="id">
 			<generator class="native" />
 		</id>
+		<property name="codeId" type="int" column="code_id" />
 		<property name="text" type="string" column="text" />
 	</class>
 </hibernate-mapping>
