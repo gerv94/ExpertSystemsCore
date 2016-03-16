@@ -12,7 +12,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import main.MainClass;
+import main.MainClassFromGUI;
 import main.model.entities.RulesHeaderEntity;
 import main.model.entities.RulesItemEntity;
 
@@ -33,7 +33,7 @@ public class RulesController {
 
 	@SuppressWarnings("unchecked")
 	public int retrieve() {
-		session = MainClass.sessionFactory.openSession();
+		session = MainClassFromGUI.sessionFactory.openSession();
 		tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -63,12 +63,12 @@ public class RulesController {
 			for (Iterator<RulesItemEntity> iterator = rules.get(i).getAntecedents().iterator(); iterator.hasNext();) {
 				RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 				strArray[i] += (ruleItem.isNegated() ? "NO " : "SI ")
-						+ MainClass.dictionaryController.getTextOf(ruleItem.getAntecedent());
+						+ MainClassFromGUI.dictionaryController.getTextOf(ruleItem.getAntecedent());
 				if (iterator.hasNext())
 					strArray[i] += " Y ";
 			}
 			strArray[i] += " IMPLICA QUE " + (rules.get(i).isNegated() ? "NO " : "SI ")
-					+ MainClass.dictionaryController.getTextOf(rules.get(i).getConsecuent());
+					+ MainClassFromGUI.dictionaryController.getTextOf(rules.get(i).getConsecuent());
 		}
 		return strArray;
 	}
@@ -80,12 +80,12 @@ public class RulesController {
 			for (Iterator<RulesItemEntity> iterator = rules.get(i).getAntecedents().iterator(); iterator.hasNext();) {
 				RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 				strArray[i] += (ruleItem.isNegated() ? StaticController.uNEGATION : "")
-						+ MainClass.dictionaryController.getCodeOf(ruleItem.getAntecedent());
+						+ MainClassFromGUI.dictionaryController.getCodeOf(ruleItem.getAntecedent());
 				if (iterator.hasNext())
 					strArray[i] += StaticController.uAND;
 			}
 			strArray[i] += " " + StaticController.uCONDITIONAL + " " + (rules.get(i).isNegated() ? StaticController.uNEGATION : "")
-					+ MainClass.dictionaryController.getCodeOf(rules.get(i).getConsecuent());
+					+ MainClassFromGUI.dictionaryController.getCodeOf(rules.get(i).getConsecuent());
 		}
 		return strArray;
 	}
@@ -116,7 +116,7 @@ public class RulesController {
 			matcher = StaticController.rulePropPattern.matcher(rule);
 			while (matcher.find()) {
 				System.out.println((matcher.group(1).equals("!") ? "not " : "") + matcher.group(2));
-				lastElement = new RulesItemEntity(MainClass.dictionaryController.getIndexOf(matcher.group(2)),
+				lastElement = new RulesItemEntity(MainClassFromGUI.dictionaryController.getIndexOf(matcher.group(2)),
 						matcher.group(1).equals("!"));
 				antecedents.add(lastElement);
 			}
@@ -131,7 +131,7 @@ public class RulesController {
 	}
 	
 	public boolean deleteRule(int id) {
-		Session session = MainClass.sessionFactory.openSession();
+		Session session = MainClassFromGUI.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -151,7 +151,7 @@ public class RulesController {
 	}
 
 	private RulesHeaderEntity addRule(RulesHeaderEntity rulesHeaderEntity) {
-		session = MainClass.sessionFactory.openSession();
+		session = MainClassFromGUI.sessionFactory.openSession();
 		tx = null;
 		if (rules.contains(rulesHeaderEntity)) {
 			throw new EntityExistsException("The rule: " + rulesHeaderEntity + " already exists");
@@ -175,7 +175,7 @@ public class RulesController {
 	}
 	
 	private RulesHeaderEntity updateRule(RulesHeaderEntity rulesHeaderEntity) {
-		Session session = MainClass.sessionFactory.openSession();
+		Session session = MainClassFromGUI.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -202,7 +202,7 @@ public class RulesController {
 			matcher = StaticController.rulePropPattern.matcher(text);
 			while (matcher.find()) {
 				System.out.println((matcher.group(1).equals("!") ? "not " : "") + matcher.group(2));
-				lastElement = new RulesItemEntity(MainClass.dictionaryController.getIndexOf(matcher.group(2)),
+				lastElement = new RulesItemEntity(MainClassFromGUI.dictionaryController.getIndexOf(matcher.group(2)),
 						matcher.group(1).equals("!"));
 				antecedents.add(lastElement);
 			}

@@ -1,0 +1,105 @@
+package lexParser.lexParser;
+import java_cup.runtime.*;
+import lexParser.models.*;
+
+parser code
+{:
+	public void syntax_error(Symbol s){
+		System.out.println("syntax_error: " + (s.right + 1) + "|" + s.left + ":" + s.value);
+	}
+	
+	public void unrecovered_syntax_error(Symbol s){
+		System.out.println("unrecovered_syntax_error: " + (s.right + 1) + "|" + s.left + ":" + s.value);
+	}
+:}
+
+action code
+{:
+	private RuleModel rule;
+	private GroupModel temporalGroup;
+	private GroupModel actualGroup;
+	private boolean negate = false;
+	private void println(String str){
+		System.out.println(str);
+	}
+	/** Constructor */
+	CUP$CupParser$actions(CupParser parser) {
+		rule = new RuleModel();
+		actualGroup = rule.getLeft();
+		this.parser = parser;
+	}
+:}
+
+init with
+{:
+	System.out.println("Cup parser has been initialized");
+:}
+
+terminal Not, Code, And, Or, Conditional, Biconditional, Reverseconditional, Startparenthesis, Stopparenthesis, Enter;
+non terminal START, SIDE, PROPOSITION, OPERATOR, MIDDLE, CONTENT, REGISTRY, END;
+
+start with START;
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+START::= 		REGISTRY;
+
+REGISTRY::= 	SIDE					{:
+											//println("::LeftSide");
+										:}
+				MIDDLE 					{:
+											//println("::Middle");
+											actualGroup = rule.getRight();
+										:}
+				SIDE					{:
+											//println("::RightSide");
+											ConsoleController.addRule(rule);
+											println("::RuleAdded " + rule.toString());
+											rule = new RuleModel();
+											actualGroup = rule.getLeft();
+										:}
+				END;
+
+SIDE::= 		PROPOSITION OPERATOR SIDE
+				| PROPOSITION;
+
+PROPOSITION::= 	Not						{:
+											negate = true;
+										:}
+				CONTENT
+				| CONTENT;
+
+CONTENT::= 		Startparenthesis		{:
+											temporalGroup = new GroupModel(actualGroup, negate);
+											actualGroup.addElement(temporalGroup);
+											negate = false;
+											actualGroup = temporalGroup;
+										:}
+				SIDE
+				Stopparenthesis 		{:
+											actualGroup = actualGroup.getFather();
+										:}
+				| Code:c				{:
+											actualGroup.addElement(new AtomicModel(negate, c.toString()));
+											negate = false;
+										:};
+
+MIDDLE::= 		Biconditional 			{:
+											rule.setDirection(0);
+										:}
+				| Reverseconditional 	{:
+											rule.setDirection(-1);
+										:}
+				| Conditional 			{:
+											rule.setDirection(1);
+										:};
+
+OPERATOR::= 	And:operator			{:
+											actualGroup.addElement(new OperatorModel(operator.toString()));
+										:} 
+				| Or:operator			{:
+											actualGroup.addElement(new OperatorModel(operator.toString()));
+										:};
+
+END::= 			Enter END
+				| Enter REGISTRY
+				| ;

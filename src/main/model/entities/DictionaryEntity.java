@@ -1,6 +1,6 @@
 package main.model.entities;
 
-import main.MainClass;
+import main.MainClassFromGUI;
 
 public class DictionaryEntity {
 	private int id;
@@ -32,7 +32,7 @@ public class DictionaryEntity {
 	
 	@Override
 	public String toString() {
-		return MainClass.dictionaryController.getCodeOf(id) + " : " + text;
+		return MainClassFromGUI.dictionaryController.getCodeOf(id) + " : " + text;
 	}
 	
 	@Override

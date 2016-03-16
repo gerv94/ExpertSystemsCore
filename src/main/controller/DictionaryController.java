@@ -8,11 +8,13 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import main.MainClass;
+import main.MainClassFromGUI;
 import main.model.entities.DictionaryEntity;
 
 public final class DictionaryController {
 	private static List<DictionaryEntity> propositions;
+	
+	//Necesarios para las peticiones a la Base de Datos
 	Transaction tx = null;
 	Session session = null;
 
@@ -22,13 +24,6 @@ public final class DictionaryController {
 				return dictionaryEntity.getText();
 		return null;
 	}
-
-	// public Integer getIndexOf(int index) {
-	// for (DictionaryEntity dictionaryEntity : propositions)
-	// if(dictionaryEntity.getId() == index)
-	// return dictionaryEntity.getId();
-	// return null;
-	// }
 
 	public Integer getIndexOf(String code) {
 		code = code.toUpperCase();
@@ -49,7 +44,7 @@ public final class DictionaryController {
 
 	@SuppressWarnings("unchecked")
 	public int retrieve() {
-		session = MainClass.sessionFactory.openSession();
+		session = MainClassFromGUI.sessionFactory.openSession();
 		tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -69,7 +64,7 @@ public final class DictionaryController {
 
 	public DictionaryEntity addPropostion(String text) throws Exception {
 		DictionaryEntity entity = null;
-		session = MainClass.sessionFactory.openSession();
+		session = MainClassFromGUI.sessionFactory.openSession();
 		tx = null;
 		if(!text.matches(StaticController.dictionaryValidator)){
 			throw new Exception("Bad input: dictionaryEntry has not matched");
@@ -98,7 +93,7 @@ public final class DictionaryController {
 	}
 
 	public boolean deletePropostion(int id) {
-		Session session = MainClass.sessionFactory.openSession();
+		Session session = MainClassFromGUI.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -118,7 +113,7 @@ public final class DictionaryController {
 	}
 
 	public DictionaryEntity updatePropostion(int id, String text) {
-		Session session = MainClass.sessionFactory.openSession();
+		Session session = MainClassFromGUI.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -138,6 +133,11 @@ public final class DictionaryController {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param index
+	 * @return Devuelve el string equivalente al codigo en la lista del elemento con el indice index
+	 */
 	public String getCodeOf(int index) {
 		String res = "";
 		for (int i = 0; i < propositions.size(); i++)
@@ -146,9 +146,14 @@ public final class DictionaryController {
 		return res;
 	}
 
-	public String convertHexbiToDec(int index) {
+	/**
+	 * 
+	 * @param i
+	 * @return Devuelve el valor en string resultado de la conversion de un numero decimal (i) a HexaBiDecimal
+	 */
+	public String convertHexbiToDec(int i) {
 		String res = "";
-		for (int remain, j = index + 1; j > 0; j /= 26) {
+		for (int remain, j = i + 1; j > 0; j /= 26) {
 			remain = j % 26;
 			res = ((char) (remain + 64)) + res;
 		}

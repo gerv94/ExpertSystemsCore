@@ -22,11 +22,11 @@
 			<version>5.1.38</version>
 		</dependency>
 
-		<!-- JFlex library -->
+		<!-- Java CUP library -->
 		<dependency>
-			<groupId>de.jflex</groupId>
-			<artifactId>jflex</artifactId>
-			<version>1.6.1</version>
+			<groupId>com.github.vbmacher</groupId>
+			<artifactId>java-cup-runtime</artifactId>
+			<version>11b</version>
 		</dependency>
 	</dependencies>
 </project>

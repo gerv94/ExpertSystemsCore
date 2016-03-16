@@ -3,7 +3,7 @@ package main.model.entities;
 import java.util.Iterator;
 import java.util.Set;
 
-import main.MainClass;
+import main.MainClassFromGUI;
 import main.controller.StaticController;
 
 public class RulesHeaderEntity {
@@ -59,12 +59,12 @@ public class RulesHeaderEntity {
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 			string += (ruleItem.isNegated() ? StaticController.NEGATION : "")
-					+ MainClass.dictionaryController.getCodeOf(ruleItem.getAntecedent());
+					+ MainClassFromGUI.dictionaryController.getCodeOf(ruleItem.getAntecedent());
 			if (iterator.hasNext())
 				string += " " + StaticController.AND + " ";
 		}
 		string += " " + StaticController.CONDITIONAL + " " + (negated ? StaticController.NEGATION : "")
-				+ MainClass.dictionaryController.getCodeOf(consecuent);
+				+ MainClassFromGUI.dictionaryController.getCodeOf(consecuent);
 		return string;
 	}
 
@@ -74,12 +74,12 @@ public class RulesHeaderEntity {
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
 			string += (ruleItem.isNegated() ? StaticController.uNEGATION : "")
-					+ MainClass.dictionaryController.getCodeOf(ruleItem.getAntecedent());
+					+ MainClassFromGUI.dictionaryController.getCodeOf(ruleItem.getAntecedent());
 			if (iterator.hasNext())
 				string += " " + StaticController.uAND + " ";
 		}
 		string += " " + StaticController.uCONDITIONAL + " " + (negated ? StaticController.uNEGATION : "")
-				+ MainClass.dictionaryController.getCodeOf(consecuent);
+				+ MainClassFromGUI.dictionaryController.getCodeOf(consecuent);
 		return string;
 	}
 
