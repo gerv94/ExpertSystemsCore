@@ -9,10 +9,11 @@ import org.hibernate.cfg.Configuration;
 
 import hibernate.models.entities.DictionaryEntity;
 import hibernate.models.entities.RulesHeaderEntity;
+import inferenceEngine.InferenceEngine;
+import jFlexCup.models.RuleModel;
 import jFlexCup.parser.ParserController;
-import lexParser.models.RuleModel;
-import main.controller.DictionaryController;
-import main.controller.RulesController;
+import main.controllers.DictionaryController;
+import main.controllers.RulesController;
 
 /**
  * 
@@ -24,6 +25,8 @@ public class ConsoleController {
 	public static SessionFactory sessionFactory = null;
 	public static DictionaryController dictionaryController = new DictionaryController();
 	public static RulesController rulesController = new RulesController();
+	public static InferenceEngine inferenceEngine = new InferenceEngine();
+	private boolean workWithDB = false;
 
 	private static void configureSessionFactory() {
 		try {
@@ -34,15 +37,23 @@ public class ConsoleController {
 		}
 	}
 
-	public ConsoleController() {
-		configureSessionFactory();
-		dictionaryController.retrieve();
-		rulesController.retrieve();
-		dictionaryController.toString();
+	public ConsoleController(boolean b) {
+		if (b) {
+			configureSessionFactory();
+			dictionaryController.retrieve();
+			rulesController.retrieve();
+			dictionaryController.toString();
+			inferenceEngine.fillElements();
+		}
+		workWithDB = b;
 	}
 
 	// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::DictionaryController
 	public DictionaryEntity addProposition(String string) {
+		if (!workWithDB) {
+			System.err.println("We are not working with data base");
+			return null;
+		}
 		try {
 			return dictionaryController.addPropostion(string);
 		} catch (Exception e) {
@@ -53,6 +64,10 @@ public class ConsoleController {
 	}
 
 	private DictionaryEntity updateProposition(String opc, String string) {
+		if (!workWithDB) {
+			System.err.println("We are not working with data base");
+			return null;
+		}
 		try {
 			return dictionaryController.updatePropostion(opc, string);
 		} catch (Exception e) {
@@ -63,6 +78,10 @@ public class ConsoleController {
 	}
 
 	private boolean deleteProposition(String string1) {
+		if (!workWithDB) {
+			System.err.println("We are not working with data base");
+			return false;
+		}
 		try {
 			return dictionaryController.deletePropostion(string1);
 		} catch (Exception e) {
@@ -73,7 +92,12 @@ public class ConsoleController {
 	}
 
 	private void printPropositions() {
-		System.out.println(dictionaryController.toString());
+		if (!workWithDB) {
+			System.err.println("We are not working with data base");
+			return;
+		}
+		for (DictionaryEntity dictionaryEntity : dictionaryController.getPropositions())
+			System.out.println(dictionaryEntity);
 	}
 
 	// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::RulesController
@@ -106,36 +130,57 @@ public class ConsoleController {
 			rule = ruleModel.stringWithOutGroups();
 			System.out.println(rule);
 			try {
-				rulesController.addRule(rule);
+				if (workWithDB)
+					rulesController.addRule(rule);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		if (!workWithDB)
+			System.err.println("We are not working with data base");
 	}
 
 	private void printRules() {
+		if (!workWithDB) {
+			System.err.println("We are not working with data base");
+			return;
+		}
 		for (RulesHeaderEntity rulesHeaderEntity : rulesController.getRules())
-			System.out.println(rulesHeaderEntity.toString());
+			System.out.println(rulesHeaderEntity.getText());
+	}
+
+	private void deleteRule(int id) {
+		if (!workWithDB) {
+			System.err.println("We are not working with data base");
+			return;
+		}
+		rulesController.deleteRule(id);
 	}
 
 	public static void main(String[] args) {
 		int opc = 0;
 		String string1, string2;
 		Scanner scanner = new Scanner(System.in);
-		ConsoleController consoleController = new ConsoleController();
+		ConsoleController consoleController = new ConsoleController(true);
 		do {
 			System.out
 					.println("::::::::::::::::::::::::::::::::::::::::\n" + "Insterfáz de consola del sistema experto\n"
-							+ "1 - Menú Diccionario\n" + "2 - Menú Reglas\n" + "3 - Procesar\n" + "0 - Salir");
+							+ "1 - Menú Diccionario\n" + "2 - Menú Reglas\n" + "3 - Motor de inferencia\n" + "0 - Salir");
 			opc = scanner.nextInt();
 			switch (opc) {
 			case 1:
 				do {
+					// scanner.nextLine();
 					System.out.println(":::::::::::::::::::\n" + "Menú de Diccionario\n" + "1 - Ingresar Proposición\n"
 							+ "2 - Modificar Proposición\n" + "3 - Eliminar Proposición\n"
-							+ "4 - Mostrar Proposiciónes\n" + "5 - Leer Archivo\n" + "0 - Regresar");
-					opc = scanner.nextInt();
+							+ "4 - Mostrar Proposiciónes\n" + "5 - Leer Archivo\n"
+							+ "6 - Retrieve Dictionary Controller\n" + "0 - Regresar");
+					try {
+						opc = scanner.nextInt();
+					} catch (Exception e) {
+						opc = -1;
+					}
 					switch (opc) {
 					case 1:
 						scanner.nextLine();
@@ -163,6 +208,9 @@ public class ConsoleController {
 					case 5:
 						System.out.println("To be implemented");
 						break;
+					case 6:
+						dictionaryController.retrieve();
+						break;
 					default:
 						break;
 					}
@@ -171,9 +219,10 @@ public class ConsoleController {
 				break;
 			case 2:
 				do {
+					scanner.nextLine();
 					System.out.println("::::::::::::::\n" + "Menú de Reglas\n" + "1 - Ingresar Regla\n"
 							+ "2 - Modificar Regla\n" + "3 - Eliminar Regla\n" + "4 - Mostrar Reglas\n"
-							+ "5 - Leer Archivo\n" + "0 - Regresar");
+							+ "5 - Leer Archivo\n" + "6 - Retrieve Rules Controller\n" + "0 - Regresar");
 					opc = scanner.nextInt();
 					switch (opc) {
 					case 1:
@@ -186,13 +235,19 @@ public class ConsoleController {
 						System.out.println("To be implemented");
 						break;
 					case 3:
-						System.out.println("To be implemented");
+						scanner.nextLine();
+						System.out.println("Ingresa el indice de la regla a eliminar");
+						opc = scanner.nextInt();
+						consoleController.deleteRule(opc);
 						break;
 					case 4:
 						consoleController.printRules();
 						break;
 					case 5:
 						consoleController.readRulesFromFile("sources/inputTest.txt");
+						break;
+					case 6:
+						rulesController.retrieve();
 						break;
 					default:
 						break;

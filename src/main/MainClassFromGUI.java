@@ -10,12 +10,13 @@ import org.hibernate.cfg.Configuration;
 
 import hibernate.models.entities.DictionaryEntity;
 import hibernate.models.entities.RulesHeaderEntity;
-import main.controller.DictionaryController;
-import main.controller.RulesController;
+import main.controllers.DictionaryController;
+import main.controllers.RulesController;
 import main.view.DictionaryFrame;
 import main.view.RulesFrame;
 
 public class MainClassFromGUI implements ActionListener {
+	@SuppressWarnings("unused")
 	private static SessionFactory sessionFactory = null;
 	private static DictionaryController dictionaryController = new DictionaryController();
 	private static RulesController rulesController = new RulesController();
@@ -89,7 +90,7 @@ public class MainClassFromGUI implements ActionListener {
 			break;
 		case "updateProposition":
 			selected = dicionaryFrame.getSelected();
-			DictionaryEntity dictionaryEntity;
+//			DictionaryEntity dictionaryEntity;
 			if (selected != null) {
 				try {
 //					dictionaryEntity = dictionaryController.updatePropostion(((DictionaryEntity) selected).getId(),

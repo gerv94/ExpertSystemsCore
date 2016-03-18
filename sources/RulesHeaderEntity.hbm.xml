@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="main.model.entities.RulesHeaderEntity" table="rulesheader">
+	<class name="hibernate.models.entities.RulesHeaderEntity" table="rulesheader">
 		<meta attribute="class-description">
 			test
 		</meta>
@@ -11,7 +11,7 @@
 		</id>
 		<set name="antecedents" cascade="all" lazy="false">
 			<key column="rule_id" not-null="true" />
-			<one-to-many class="main.model.entities.RulesItemEntity" />
+			<one-to-many class="hibernate.models.entities.RulesItemEntity" />
 		</set>
 		<property name="consecuent" type="int" column="consecuent_id" />
 		<property name="negated" type="true_false" column="negated" />

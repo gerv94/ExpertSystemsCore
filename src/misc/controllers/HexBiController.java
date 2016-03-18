@@ -1,4 +1,4 @@
-package main;
+package misc.controllers;
 
 /**
  * 
@@ -30,8 +30,13 @@ public abstract class HexBiController {
 		string = string.toUpperCase();
 		int res = 0;
 		for (int i = 0; i < string.length(); i++)
-			res += Math.pow(26, i) * (string.charAt(i) - 64);
+			res += Math.pow(26, i) * (string.charAt(string.length() - (i + 1)) - 64);
 		res--;
 		return res;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(intToHexBi(120));		//d= 3 q=16 -> 
+		System.out.println(hexBiToInteger("DQ"));	//
 	}
 }

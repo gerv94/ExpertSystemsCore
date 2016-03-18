@@ -1,6 +1,6 @@
 package hibernate.models.entities;
 
-import main.HexBiController;
+import misc.controllers.HexBiController;
 
 public class DictionaryEntity {
 	private int id;
@@ -43,7 +43,7 @@ public class DictionaryEntity {
 		DictionaryEntity dictionaryEntity;
 		if (obj instanceof DictionaryEntity) {
 			dictionaryEntity = (DictionaryEntity) obj;
-			res = text.equals(dictionaryEntity.getText());
+			res = text.equals(dictionaryEntity.getText()) && codeId == dictionaryEntity.codeId;
 		}
 		return res;
 	}

@@ -6,12 +6,13 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import jFlexCup.models.DiscretElement;
+import jFlexCup.models.GroupModel;
+import jFlexCup.models.LiteralModel;
+import jFlexCup.models.OperatorModel;
+import jFlexCup.models.RuleModel;
 import java_cup.runtime.DefaultSymbolFactory;
 import java_cup.runtime.SymbolFactory;
-import lexParser.models.DiscretElement;
-import lexParser.models.GroupModel;
-import lexParser.models.LiteralModel;
-import lexParser.models.RuleModel;
 
 /**
  * 
@@ -75,30 +76,49 @@ public abstract class ParserController {
 		parsedRules = tempList;
 		tempList = new ArrayList<>();
 		for (RuleModel ruleModel : parsedRules) {
-			if(ruleModel.getLeft().isDNF()){
+			if (ruleModel.getLeft().isDNF()) {
 				for (DiscretElement discretElement : ruleModel.getLeft().getElements()) {
 					if (discretElement instanceof GroupModel) {
 						tempList.add(new RuleModel((GroupModel) discretElement, 1, ruleModel.getRight()));
-					}else if(discretElement instanceof LiteralModel){
+					} else if (discretElement instanceof LiteralModel) {
 						tempList.add(new RuleModel((LiteralModel) discretElement, 1, ruleModel.getRight()));
 					}
 				}
-			}else{
+			} else {
 				tempList.add(ruleModel);
 			}
 		}
 		parsedRules = tempList;
 		tempList = new ArrayList<>();
 		for (RuleModel ruleModel : parsedRules) {
-			if(ruleModel.getRight().isAnd()){
+			if (ruleModel.getRight().isAnd()) {
 				for (DiscretElement discretElement : ruleModel.getRight().getElements()) {
 					if (discretElement instanceof LiteralModel) {
 						tempList.add(new RuleModel(ruleModel.getLeft(), 1, discretElement));
 					}
 				}
-			}else{
-				//System.err.println("Error trying to proccess: " + ruleModel.toString());
-				throw new Exception("Error trying to proccess: " + ruleModel.toString());
+			} else {
+				RuleModel model;
+				for (DiscretElement discretElement : ruleModel.getRight().getElements()) {
+					if (discretElement instanceof LiteralModel) {
+						
+						model = new RuleModel(ruleModel.getLeft().clone(), 1, discretElement);
+						for (DiscretElement discretElement2 : ruleModel.getRight().getElements()) {
+							if (discretElement2 instanceof LiteralModel) {
+								if (!discretElement.equals(discretElement2)) {
+									model.getLeft().addElement(new OperatorModel("&"));
+									model.getLeft().addElement(
+											new LiteralModel(true, ((LiteralModel) discretElement2).getAtomic()));
+								}
+							}
+						}
+						tempList.add(model);
+					}
+				}
+				// System.err.println("Error trying to proccess: " +
+				// ruleModel.toString());
+				// throw new Exception("Error trying to proccess: " +
+				// ruleModel.toString());
 			}
 		}
 		parsedRules = tempList;
@@ -108,7 +128,7 @@ public abstract class ParserController {
 	}
 
 	public static void main(String[] args) {
-		File file = new File("resources/inputTest.txt");
+		File file = new File("sources/inputTest.txt");
 		try {
 			ParserController.parse(file);
 		} catch (Exception e) {

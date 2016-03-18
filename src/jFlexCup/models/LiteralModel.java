@@ -1,4 +1,4 @@
-package lexParser.models;
+package jFlexCup.models;
 
 /**
  * 
@@ -39,5 +39,12 @@ public class LiteralModel implements DiscretElement {
 	@Override
 	public String toString() {
 		return negated ? "!" + atomic : atomic;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof LiteralModel)
+			return ((LiteralModel) obj).atomic.equals(atomic) && ((LiteralModel) obj).negated == negated;
+		return false;
 	}
 }

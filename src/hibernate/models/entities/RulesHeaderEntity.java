@@ -3,8 +3,8 @@ package hibernate.models.entities;
 import java.util.Iterator;
 import java.util.Set;
 
-import main.HexBiController;
-import main.controller.StaticController;
+import main.ConsoleController;
+import misc.controllers.HexBiController;
 
 public class RulesHeaderEntity {
 	private int id;
@@ -55,15 +55,15 @@ public class RulesHeaderEntity {
 	}
 
 	public String getText() {
-		String string = "";
+		String string = "SI ";
 		for (Iterator<RulesItemEntity> iterator = antecedents.iterator(); iterator.hasNext();) {
 			RulesItemEntity ruleItem = (RulesItemEntity) iterator.next();
-			string += (ruleItem.isNegated() ? "!" : "") + ruleItem.getAntecedent();
+			string += (ruleItem.isNegated() ? "NO " : "") + ConsoleController.dictionaryController.getTextOf(ruleItem.getAntecedent());
 			if (iterator.hasNext())
-				string += " & ";
+				string += " Y ";
 		}
-		string += " > " + (negated ? "!" : "") + HexBiController.intToHexBi(consecuent);
-		return string;
+		string += " ENTONCES " + (negated ? "NO " : "") + ConsoleController.dictionaryController.getTextOf(consecuent);
+		return id + "- " + string;
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class RulesHeaderEntity {
 				string += " & ";
 		}
 		string += " > " + (negated ? "!" : "") + HexBiController.intToHexBi(consecuent);
-		return string;
+		return id + "- " + string;
 	}
 
 	@Override

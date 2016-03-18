@@ -1,4 +1,4 @@
-package lexParser.models;
+package jFlexCup.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -290,5 +290,14 @@ public class GroupModel implements DiscretElement {
 
 	public List<DiscretElement> getElements() {
 		return elements;
+	}
+	
+	public GroupModel clone(){
+		GroupModel res = new GroupModel();
+		for (DiscretElement discretElement : elements)
+			res.addElement(discretElement);
+		res.father = father;
+		res.negated = negated;
+		return res;
 	}
 }

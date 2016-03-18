@@ -5,11 +5,11 @@
 
 package jFlexCup.parser;
 
+import jFlexCup.models.GroupModel;
+import jFlexCup.models.LiteralModel;
+import jFlexCup.models.OperatorModel;
+import jFlexCup.models.RuleModel;
 import java_cup.runtime.Symbol;
-import lexParser.models.LiteralModel;
-import lexParser.models.GroupModel;
-import lexParser.models.OperatorModel;
-import lexParser.models.RuleModel;
 
 /**
  * CUP v0.11b 20150930 (SVN rev 66) generated parser.

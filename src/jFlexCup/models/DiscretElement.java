@@ -1,4 +1,4 @@
-package lexParser.models;
+package jFlexCup.models;
 
 public interface DiscretElement {
 	public void negate();

@@ -1,6 +1,8 @@
+/hibernate/
+/jFlexCup/
 /lexParser/
 /main/
 /regex/
-/jFlexCup/
-/META-INF/
-/hibernate/
+/misc/
+/mx/
+/inferenceEngine/

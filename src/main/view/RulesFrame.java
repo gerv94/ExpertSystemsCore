@@ -19,7 +19,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import hibernate.models.entities.RulesHeaderEntity;
-import main.controller.StaticController;
 
 public class RulesFrame extends JFrame implements Runnable, ActionListener {
 
