@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.border.EmptyBorder;
 
+import hibernate.models.entities.DictionaryEntity;
 import main.controller.StaticController;
-import main.model.entities.DictionaryEntity;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

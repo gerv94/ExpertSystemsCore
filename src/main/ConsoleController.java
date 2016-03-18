@@ -7,11 +7,12 @@ import java.util.Scanner;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import hibernate.models.entities.DictionaryEntity;
+import hibernate.models.entities.RulesHeaderEntity;
 import jFlexCup.parser.ParserController;
 import lexParser.models.RuleModel;
 import main.controller.DictionaryController;
 import main.controller.RulesController;
-import main.model.entities.DictionaryEntity;
 
 /**
  * 
@@ -99,6 +100,8 @@ public class ConsoleController {
 	private void addParsedRules() {
 		List<RuleModel> parsedRules = ParserController.getParsedRules();
 		String rule;
+		System.out.println();
+		System.out.println("Generated rules");
 		for (RuleModel ruleModel : parsedRules) {
 			rule = ruleModel.stringWithOutGroups();
 			System.out.println(rule);
@@ -111,31 +114,27 @@ public class ConsoleController {
 		}
 	}
 
+	private void printRules() {
+		for (RulesHeaderEntity rulesHeaderEntity : rulesController.getRules())
+			System.out.println(rulesHeaderEntity.toString());
+	}
+
 	public static void main(String[] args) {
 		int opc = 0;
 		String string1, string2;
 		Scanner scanner = new Scanner(System.in);
 		ConsoleController consoleController = new ConsoleController();
 		do {
-			System.out.println(
-					"::::::::::::::::::::::::::::::::::::::::\n"
-					+ "Insterfáz de consola del sistema experto\n"
-					+ "1 - Menú Diccionario\n"
-					+ "2 - Menú Reglas\n"
-					+ "3 - Procesar\n"
-					+ "0 - Salir");
+			System.out
+					.println("::::::::::::::::::::::::::::::::::::::::\n" + "Insterfáz de consola del sistema experto\n"
+							+ "1 - Menú Diccionario\n" + "2 - Menú Reglas\n" + "3 - Procesar\n" + "0 - Salir");
 			opc = scanner.nextInt();
 			switch (opc) {
 			case 1:
 				do {
-					System.out.println(":::::::::::::::::::\n"
-							+ "Menú de Diccionario\n"
-							+ "1 - Ingresar Proposición\n"
-							+ "2 - Modificar Proposición\n"
-							+ "3 - Eliminar Proposición\n"
-							+ "4 - Mostrar Proposiciónes\n"
-							+ "5 - Leer Archivo\n"
-							+ "0 - Regresar");
+					System.out.println(":::::::::::::::::::\n" + "Menú de Diccionario\n" + "1 - Ingresar Proposición\n"
+							+ "2 - Modificar Proposición\n" + "3 - Eliminar Proposición\n"
+							+ "4 - Mostrar Proposiciónes\n" + "5 - Leer Archivo\n" + "0 - Regresar");
 					opc = scanner.nextInt();
 					switch (opc) {
 					case 1:
@@ -172,14 +171,9 @@ public class ConsoleController {
 				break;
 			case 2:
 				do {
-					System.out.println("::::::::::::::\n"
-							+ "Menú de Reglas\n"
-							+ "1 - Ingresar Regla\n"
-							+ "2 - Modificar Regla\n"
-							+ "3 - Eliminar Regla\n"
-							+ "4 - Mostrar Reglas\n"
-							+ "5 - Leer Archivo\n"
-							+ "0 - Regresar");
+					System.out.println("::::::::::::::\n" + "Menú de Reglas\n" + "1 - Ingresar Regla\n"
+							+ "2 - Modificar Regla\n" + "3 - Eliminar Regla\n" + "4 - Mostrar Reglas\n"
+							+ "5 - Leer Archivo\n" + "0 - Regresar");
 					opc = scanner.nextInt();
 					switch (opc) {
 					case 1:
@@ -195,10 +189,9 @@ public class ConsoleController {
 						System.out.println("To be implemented");
 						break;
 					case 4:
-						System.out.println("To be implemented");
+						consoleController.printRules();
 						break;
 					case 5:
-						scanner.nextLine();
 						consoleController.readRulesFromFile("sources/inputTest.txt");
 						break;
 					default:

@@ -9,9 +9,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import hibernate.models.entities.DictionaryEntity;
 import main.ConsoleController;
 import main.HexBiController;
-import main.model.entities.DictionaryEntity;
 import regex.parser.RegExController;
 
 public final class DictionaryController {

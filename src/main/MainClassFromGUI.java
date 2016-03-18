@@ -8,10 +8,10 @@ import javax.swing.DefaultListModel;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import hibernate.models.entities.DictionaryEntity;
+import hibernate.models.entities.RulesHeaderEntity;
 import main.controller.DictionaryController;
 import main.controller.RulesController;
-import main.model.entities.DictionaryEntity;
-import main.model.entities.RulesHeaderEntity;
 import main.view.DictionaryFrame;
 import main.view.RulesFrame;
 

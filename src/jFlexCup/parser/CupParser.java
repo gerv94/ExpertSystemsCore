@@ -153,11 +153,11 @@ public class CupParser extends java_cup.runtime.lr_parser {
 	}
 
 	public void syntax_error(Symbol s) {
-		System.out.println("syntax_error: " + (s.right + 1) + "|" + s.left + ":" + s.value);
+		System.err.println("syntax_error: " + (s.right + 1) + "|" + s.left + ":" + s.value + " - " + s.toString());
 	}
 
 	public void unrecovered_syntax_error(Symbol s) {
-		System.out.println("unrecovered_syntax_error: " + (s.right + 1) + "|" + s.left + ":" + s.value);
+		System.err.println("unrecovered_syntax_error: " + (s.right + 1) + "|" + s.left + ":" + s.value + " - " + s.toString());
 	}
 
 	/** Cup generated class to encapsulate user supplied action code. */

@@ -12,10 +12,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import hibernate.models.entities.RulesHeaderEntity;
+import hibernate.models.entities.RulesItemEntity;
 import main.ConsoleController;
 import main.HexBiController;
-import main.model.entities.RulesHeaderEntity;
-import main.model.entities.RulesItemEntity;
 import regex.parser.RegExController;
 
 public class RulesController {
@@ -154,7 +154,7 @@ public class RulesController {
 			session.save(rulesHeaderEntity);
 			tx.commit();
 		} catch (HibernateException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 			if (tx != null)
 				tx.rollback();
 			return null;
